@@ -73,15 +73,6 @@ def interpolate_landmarks(extracted_data, limit_frames=5):
     # 몸통(Pose)과 얼굴(Face, Lip, Eye) 컬럼 분류
     body_face_cols = [c for c in cols 
                       if any(group in c for group in BODY_FACE_GROUPS)]
-    
-    # df[cols] = df[cols].interpolate(method='linear', limit=limit_frames, limit_area='inside')
-        
-    # # 몸통과 얼굴은 영상 끝단에서도 존재해야 하므로 과거/미래 값으로 채움
-    # df[body_face_cols] = df[body_face_cols].bfill().ffill()
-
-    # # 손은 짧은 깜빡임(10프레임)은 위에서 보간되었으므로, 
-    # # 양 끝단의 긴 차렷 자세(NaN)는 억지로 채우지 않고 0.0으로 둠
-    # df[hand_cols] = df[hand_cols].fillna(0.0)
 
     # 손의 경우 연속 5프레임 내의 경우에 대해서만 보간 수행
     df[hand_cols] = df[hand_cols].interpolate(method='linear', limit=limit_frames, limit_area='inside', limit_direction='both')
@@ -116,3 +107,4 @@ def interpolate_landmarks(extracted_data, limit_frames=5):
         interpolated_list.append(frame_dict)
 
     return interpolated_list
+

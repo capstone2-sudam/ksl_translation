@@ -13,14 +13,16 @@ class PseudoSensorConverter:
         [0, 17, 18], [17, 18, 19] # 소지 (MCP, PIP)
     ]
 
+    """
+    MediaPipe 손 랜드마크를 받아 원시 굽힘 각도(Raw Flex Angles) 배열(10개)을 반환합니다.
+    (쫙 폈을 때 0도, 굽힐수록 각도 증가)
+    """
+    
     # 장갑 esp에서 받는 값 형태 
     # 파싱 문자: ntp_timestamp, 엄지_mcp, 엄지_pip, 검지_mcp, 검지_pip, 중지_mcp, 중지_pip, 약지_mcp, 약지_pip, 소지_mcp, 소지_pip
     @classmethod
     def get_flex_sensor_payload(cls, hand_landmarks: list) -> list:
-        """
-        MediaPipe 손 랜드마크를 받아 원시 굽힘 각도(Raw Flex Angles) 배열(10개)을 반환합니다.
-        (쫙 폈을 때 0도, 굽힐수록 각도 증가)
-        """
+
 
         if not hand_landmarks or len(hand_landmarks) < 21:
             return [0.0] * 10
@@ -55,12 +57,13 @@ class PseudoSensorConverter:
             
         return raw_angles
     
+    
+    """
+    손등 평면을 기준으로 Roll, Pitch, Yaw 각도(3개) 추출
+    왼손/오른손 여부(is_right_hand)에 따라 Z축 방향을 올바르게 보정합니다.
+    """
     @classmethod
     def get_imu_sensor_payload(cls, hand_landmarks: list, is_right_hand: bool = True) -> list:
-        """
-        손등 평면을 기준으로 Roll, Pitch, Yaw 각도(3개) 추출
-        왼손/오른손 여부(is_right_hand)에 따라 Z축 방향을 올바르게 보정합니다.
-        """
 
         error_quat = [0.0, 0.0, 0.0, 1.0]
 

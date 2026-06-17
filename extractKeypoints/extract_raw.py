@@ -42,8 +42,8 @@ def extract_raw_features(video_path):
     original_fps = cap.get(cv2.CAP_PROP_FPS)
     # 모든 영상의 추출 프레임 fps를 30으로 설정
     target_fps = 30.0
-    frame_count = 0 # cv2.CAP_PROP_FPS로 추출한 frame 번호
-    saved_frame_count = 0 # 30fps로 맞춘 frame 번호
+    frame_count = 0
+    saved_frame_count = 0
 
     mp_holistic = mp.solutions.holistic
     with mp_holistic.Holistic(
@@ -77,7 +77,6 @@ def extract_raw_features(video_path):
             eye_pts = np.zeros((32, 3)) # 눈 32개 키포인트 추가
             left_hands_pts = np.zeros((21, 3)) # 왼손 21개 키포인트
             right_hands_pts = np.zeros((21, 3)) # 오른손 21개 키포인트
-            # 눈 키포인트
 
             # Pose 추출
             if results.pose_landmarks:
@@ -121,8 +120,8 @@ def extract_raw_features(video_path):
                 "eyebrow_keypoints": brow_pts.tolist(),
                 "eye_keypoints": eye_pts.tolist(),
                 "pose_keypoints": pose_pts.tolist(),
-                "left_hand_keypoints": left_hands_pts.tolist(),   # 왼손 추가
-                "right_hand_keypoints": right_hands_pts.tolist()  # 오른손 추가
+                "left_hand_keypoints": left_hands_pts.tolist(),
+                "right_hand_keypoints": right_hands_pts.tolist()
             })
 
     cap.release()
